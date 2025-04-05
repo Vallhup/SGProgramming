@@ -41,6 +41,7 @@
 
 ![Image](https://github.com/user-attachments/assets/0043a510-524d-433e-84f6-cd6e26ea3eca)
 
+<img src="https://github.com/user-attachments/assets/0043a510-524d-433e-84f6-cd6e26ea3eca" width="550" height="366">
 
 4. 개발 일정
 
