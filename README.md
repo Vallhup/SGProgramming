@@ -39,6 +39,8 @@
  - 몬스터가 기지에 들어가면 Life 감소
  - 골드로 추가 타워 설치 및 타워 강화
 
+![Image](https://github.com/user-attachments/assets/0043a510-524d-433e-84f6-cd6e26ea3eca)
+
 
 4. 개발 일정
 
