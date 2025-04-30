@@ -20,7 +20,7 @@ public class AttackTower extends Sprite {
 
     public AttackTower() {
         // TODO : 이미지 추가 필요
-        //super(R.mipmap.)
+        super(R.mipmap.attacktower);
         setPosition(Metrics.width / 2, Metrics.height - 200, TOWER_WIDTH, TOWER_WIDTH);
         targetX = x;
     }
