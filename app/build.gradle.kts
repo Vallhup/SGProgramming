@@ -6,6 +6,10 @@ android {
     namespace = "com.example.spgpproject"
     compileSdk = 35
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.example.spgpproject"
         minSdk = 24
@@ -33,10 +37,12 @@ android {
 
 dependencies {
 
+    implementation(project(":a2dg"))
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.games.activity)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
