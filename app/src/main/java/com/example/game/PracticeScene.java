@@ -7,7 +7,7 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class PracticeScene extends Scene {
-    pricate static final String TAG = PracticeScene.class.getSimpleName();
+    private static final String TAG = PracticeScene.class.getSimpleName();
 
     public enum Layer {
         bg1, enemy, bullet, tower, bg2, ui;

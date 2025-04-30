@@ -2,6 +2,7 @@ package com.example.app;
 
 import android.os.Bundle;
 
+import com.example.game.PracticeScene;
 import com.example.spgpproject.BuildConfig;
 
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.activity.GameActivity;
