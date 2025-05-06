@@ -8,7 +8,7 @@ import com.example.spgpproject.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
-public class AttackTower extends Sprite {
+public class SlowTower extends Sprite {
     private static final String TAG = AttackTower.class.getSimpleName();
     private static final float TOWER_WIDTH = 175f;
     private static final int TOWER_SRT_WIDTH = 80;
@@ -18,8 +18,9 @@ public class AttackTower extends Sprite {
     private float fireCoolTime = FIRE_INTERVAL;
     private static final float BULLET_OFFSET = 80f;
 
-    public AttackTower() {
-        super(R.mipmap.attacktower);
+    public SlowTower() {
+        // TODO : 이미지 추가 필요
+        // super(R.mipmap.slowtower);
         setPosition(Metrics.width / 2, Metrics.height - 200, TOWER_WIDTH, TOWER_WIDTH);
         targetX = x;
     }
