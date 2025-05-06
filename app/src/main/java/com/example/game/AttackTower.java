@@ -51,10 +51,11 @@ public class AttackTower extends Sprite {
         // TODO : Touch Down 시 강화 UI 추가
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_MOVE:
-            case MotionEvent.ACTION_UP:
-                float[] pts = Metrics.fromScreen(event.getX(), event.getY());
-                setTargetX(pts[0]);
+                //float[] pts = Metrics.fromScreen(event.getX(), event.getY());
+                //setTargetX(pts[0]);
+
+
+
                 return true;
         }
         return false;

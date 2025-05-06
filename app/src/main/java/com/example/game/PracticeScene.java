@@ -10,7 +10,7 @@ public class PracticeScene extends Scene {
     private static final String TAG = PracticeScene.class.getSimpleName();
 
     public enum Layer {
-        bg1, enemy, bullet, tower, bg2, ui;
+        bg1, enemy, bullet, tower, ui;
         public static final int COUNT = values().length;
     }
 
@@ -20,5 +20,7 @@ public class PracticeScene extends Scene {
 
         // TODO : 배경 이미지 추가
         // add(Layer.bg1, new HorzScrollBackground());
+
+        Enemy enemy = Enemy.get(Enemy.)
     }
 }

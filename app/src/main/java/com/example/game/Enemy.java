@@ -14,6 +14,10 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.Gauge;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class Enemy extends AnimSprite implements IRecyclable, IBoxCollidable, ILayerProvider<PracticeScene.Layer> {
+    public enum Type {
+        boss, normal;
+    }
+
     // SPEED 값 설정 필요
     private static final float SPEED = 300f;
     private static final float RADIUS = 90f;
@@ -34,6 +38,7 @@ public class Enemy extends AnimSprite implements IRecyclable, IBoxCollidable, IL
     }
 
     public Enemy() { super(0, 0, 0); }
+
 
     private Enemy init(int level, int index){
         // TODO : 이미지 추가 필요
