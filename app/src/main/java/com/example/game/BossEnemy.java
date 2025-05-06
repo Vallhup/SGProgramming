@@ -13,7 +13,7 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.Gauge;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
-public class Enemy extends AnimSprite implements IRecyclable, IBoxCollidable, ILayerProvider<PracticeScene.Layer> {
+public class BossEnemy extends AnimSprite implements IRecyclable, IBoxCollidable, ILayerProvider<PracticeScene.Layer> {
     // SPEED 값 설정 필요
     private static final float SPEED = 300f;
     private static final float RADIUS = 90f;
@@ -29,13 +29,13 @@ public class Enemy extends AnimSprite implements IRecyclable, IBoxCollidable, IL
     protected  static Gauge gauge;
     //protected static Gauge gauge = new Gauge(0.1f, R.color.enemy_gauge_fg, R.color.enemy_gauge_bg);
 
-    public static Enemy get(int level, int index){
-        return Scene.top().getRecyclable(Enemy.class).init(level, index);
+    public static BossEnemy get(int level, int index){
+        return Scene.top().getRecyclable(BossEnemy.class).init(level, index);
     }
 
-    public Enemy() { super(0, 0, 0); }
+    public BossEnemy() { super(0, 0, 0); }
 
-    private Enemy init(int level, int index){
+    private BossEnemy init(int level, int index){
         // TODO : 이미지 추가 필요
         //this.setImageResourceId(R.mipmap.enemy);
 
@@ -77,6 +77,8 @@ public class Enemy extends AnimSprite implements IRecyclable, IBoxCollidable, IL
         float gauge_y = dstRect.bottom;
         gauge.draw(canvas, gauge_x, gauge_y, gauge_width, (float)life / maxLife);
     }
+
+    // TODO : 5초 마다 주변 타워들의 움직임을 멈추게하는 패턴
 
     private void updateCollisionRect() {
         collisionRect.set(dstRect);
