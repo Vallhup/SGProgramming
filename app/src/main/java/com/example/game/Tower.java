@@ -8,8 +8,11 @@ import com.example.spgpproject.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
-public class SlowTower extends Sprite {
-    private static final String TAG = AttackTower.class.getSimpleName();
+public class Tower extends Sprite {
+    public enum Type {
+        attack, slow;
+    }
+    private static final String TAG = Tower.class.getSimpleName();
     private static final float TOWER_WIDTH = 175f;
     private static final int TOWER_SRT_WIDTH = 80;
     private float targetX;
@@ -18,9 +21,8 @@ public class SlowTower extends Sprite {
     private float fireCoolTime = FIRE_INTERVAL;
     private static final float BULLET_OFFSET = 80f;
 
-    public SlowTower() {
-        // TODO : 이미지 추가 필요
-        // super(R.mipmap.slowtower);
+    public Tower() {
+        super(R.mipmap.attacktower);
         setPosition(Metrics.width / 2, Metrics.height - 200, TOWER_WIDTH, TOWER_WIDTH);
         targetX = x;
     }
@@ -52,10 +54,11 @@ public class SlowTower extends Sprite {
         // TODO : Touch Down 시 강화 UI 추가
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_MOVE:
-            case MotionEvent.ACTION_UP:
-                float[] pts = Metrics.fromScreen(event.getX(), event.getY());
-                setTargetX(pts[0]);
+                //float[] pts = Metrics.fromScreen(event.getX(), event.getY());
+                //setTargetX(pts[0]);
+
+
+
                 return true;
         }
         return false;
