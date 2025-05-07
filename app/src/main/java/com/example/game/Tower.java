@@ -73,6 +73,8 @@ public class Tower extends Sprite {
 
     private Enemy setTarget() {
         // TODO : Target 설정 코드 추가
+        Enemy temp = new Enemy();
+        return temp;
     }
 
     public boolean onTouch(MotionEvent event) {

@@ -21,6 +21,6 @@ public class PracticeScene extends Scene {
         // TODO : 배경 이미지 추가
         // add(Layer.bg1, new HorzScrollBackground());
 
-        Enemy enemy = Enemy.get(Enemy.)
+        //Enemy enemy = Enemy.get(Enemy.)
     }
 }
