@@ -17,15 +17,15 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.res.BitmapPool;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class Tower extends Sprite {
-    private int level;
+    protected int level;
 
     public enum Type {
         attack, slow;
     }
     private static final String TAG = Tower.class.getSimpleName();
 
-    private float damage, range;
-    private float angle = -90;
+    protected float damage, range;
+    protected float angle = -90;
     private static final float FIRE_INTERVAL = 0.25f;
     private float fireCoolTime = FIRE_INTERVAL;
     private static final float BULLET_OFFSET = 80f;
@@ -44,10 +44,6 @@ public class Tower extends Sprite {
         super.update();
 
         // TODO : update 코드 추가
-    }
-
-    public Enemy findNearestEnemy() {
-        // TODO : 범위 내 가장 가까운 적 식별
     }
 
     private static Paint rangePaint;
@@ -75,8 +71,7 @@ public class Tower extends Sprite {
         // TODO : Attack 코드 추가
     }
 
-    private void setTargetX(float x) {
-        //targetX = Math.max(radius, Math.min(x, Metrics.width - radius));
+    private Enemy setTarget() {
         // TODO : Target 설정 코드 추가
     }
 
