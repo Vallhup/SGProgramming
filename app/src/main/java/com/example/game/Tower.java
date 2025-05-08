@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 
 import com.example.spgpproject.R;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IGameObject;
@@ -72,20 +73,31 @@ public class Tower extends Sprite {
     }
 
     private Enemy setTarget() {
-        // TODO : Target 설정 코드 추가
-        Enemy temp = new Enemy();
-        return temp;
+        float dist = range;
+        Enemy nearest = null;
+        ArrayList<IGameObject> enemies = PracticeScene.top().objectsAt(PracticeScene.Layer.enemy);
+        for(IGameObject gameObject : enemies){
+            if(!(gameObject instanceof Enemy)) continue;
+            Enemy enemy = (Enemy) gameObject;
+            float fx = enemy.getX();
+            float fy = enemy.getY();
+            float dx = x - fx;
+            if(dx > dist) continue;
+            float dy = y - fy;
+            if(dy > dist) continue;
+            float d = (float) Math.sqrt(dx * dx + dy * dy);
+            if(dist > d){
+                dist = d;
+                nearest = enemy;
+            }
+        }
+        return nearest;
     }
 
     public boolean onTouch(MotionEvent event) {
         // TODO : Touch Down 시 강화 UI 추가
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                //float[] pts = Metrics.fromScreen(event.getX(), event.getY());
-                //setTargetX(pts[0]);
-
-
-
                 return true;
         }
         return false;
