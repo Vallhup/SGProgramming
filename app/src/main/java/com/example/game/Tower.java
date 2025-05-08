@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IGameObject;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.res.BitmapPool;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class Tower extends Sprite {
@@ -67,9 +69,20 @@ public class Tower extends Sprite {
         canvas.drawBitmap(barrelBitmap, null, barrelRect, null);
         canvas.restore();
     }
-
+    
     private void attack() {
-        // TODO : Attack 코드 추가
+        Enemy target = setTarget();
+
+        fireCoolTime -= GameView.frameTime;
+        if(fireCoolTime > 0){
+            return;
+        }
+        fireCoolTime = FIRE_INTERVAL;
+        PracticeScene scene = (PracticeScene) Scene.top();
+        if(scene == null) return;
+
+        Bullet bullet = Bullet.get(this, target);
+        scene.add(PracticeScene.Layer.enemy, bullet);
     }
 
     private Enemy setTarget() {

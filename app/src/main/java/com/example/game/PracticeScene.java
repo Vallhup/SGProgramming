@@ -3,11 +3,14 @@ package com.example.game;
 import com.example.spgpproject.R;
 
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.HorzScrollBackground;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Score;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class PracticeScene extends Scene {
     private static final String TAG = PracticeScene.class.getSimpleName();
+
+    private final Score score = null;
 
     public enum Layer {
         bg1, enemy, bullet, tower, ui;
@@ -22,5 +25,10 @@ public class PracticeScene extends Scene {
         // add(Layer.bg1, new HorzScrollBackground());
 
         //Enemy enemy = Enemy.get(Enemy.)
+        //this.score = new Score();
+    }
+
+    public int getScore() {
+        return score.getScore();
     }
 }
