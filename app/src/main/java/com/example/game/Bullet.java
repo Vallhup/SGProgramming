@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 
 public class Bullet extends Sprite implements IRecyclable {
     public enum Type {
@@ -27,8 +28,10 @@ public class Bullet extends Sprite implements IRecyclable {
     }
 
     public static Bullet get(Tower tower, Enemy enemy) {
-        //Bullet bullet = (Bullet) RecyclerView
-        Bullet bullet = new Bullet();
+        Bullet bullet = Scene.top().getRecyclable(Bullet.class);
+        if(bullet == null){
+            bullet = new Bullet();
+        }
         bullet.init(tower, enemy);
 
         return bullet;
@@ -55,6 +58,7 @@ public class Bullet extends Sprite implements IRecyclable {
     @Override
     public void update() {
         // TODO : update 코드 추가
+
     }
 
     @Override
