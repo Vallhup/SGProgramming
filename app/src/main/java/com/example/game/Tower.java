@@ -69,7 +69,7 @@ public class Tower extends Sprite {
         canvas.drawBitmap(barrelBitmap, null, barrelRect, null);
         canvas.restore();
     }
-    
+
     private void attack() {
         Enemy target = setTarget();
 
