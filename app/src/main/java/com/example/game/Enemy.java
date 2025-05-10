@@ -5,7 +5,11 @@ import android.graphics.RectF;
 
 import com.example.spgpproject.R;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IGameObject;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
@@ -37,6 +41,9 @@ public class Enemy extends AnimSprite implements IRecyclable, IBoxCollidable, IL
     private int life, maxLife;
     protected RectF collisionRect = new RectF();
 
+    private float range;
+    private Type type;
+
     // TODO : Gauge 색 설정 필요
     protected  static Gauge gauge;
     //protected static Gauge gauge = new Gauge(0.1f, R.color.enemy_gauge_fg, R.color.enemy_gauge_bg);
@@ -60,6 +67,14 @@ public class Enemy extends AnimSprite implements IRecyclable, IBoxCollidable, IL
         // TODO : 레벨에 따라 체력이 얼마나 올라갈지 설정
         this.life = this.maxLife = (level + 1) * 10;
         dy = SPEED;
+
+        if(type == Type.boss){
+            range = 7f;
+        }
+
+        else{
+            range = 0;
+        }
 
         return this;
     }
@@ -89,6 +104,42 @@ public class Enemy extends AnimSprite implements IRecyclable, IBoxCollidable, IL
         float gauge_x = x - gauge_width / 2;
         float gauge_y = dstRect.bottom;
         gauge.draw(canvas, gauge_x, gauge_y, gauge_width, (float)life / maxLife);
+    }
+
+    private void bossAttack() {
+        ArrayList<IGameObject> targets = setTarget();
+
+        for(IGameObject gameObject : targets) {
+            if(!(gameObject instanceof Tower)) continue;
+
+            Tower tower = (Tower) gameObject;
+            tower.setAttacked(true);
+        }
+    }
+
+    private ArrayList<IGameObject> setTarget() {
+        ArrayList<IGameObject> towers = PracticeScene.top().objectsAt(PracticeScene.Layer.tower);
+        ArrayList<IGameObject> targets = new ArrayList<IGameObject>();
+
+        float mx = this.x;
+        float my = this.y;
+        float range = this.range;
+
+        for(IGameObject gameObject : towers){
+            // range안에 있는 tower들을 targets에 push
+            if(!(gameObject instanceof Tower)) continue;
+
+            Tower tower = (Tower) gameObject;
+            float dx = tower.x - mx;
+            float dy = tower.y - my;
+            float distanceSquared = dx * dx + dy * dy;
+
+            if(distanceSquared <= range * range){
+                targets.add(gameObject);
+            }
+        }
+
+        return targets;
     }
 
     private void updateCollisionRect() {

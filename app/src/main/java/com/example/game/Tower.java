@@ -21,6 +21,9 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class Tower extends Sprite {
     protected int level;
+    protected float x, y;
+
+    private boolean isAttacked;
 
     public enum Type {
         attack, slow;
@@ -35,10 +38,13 @@ public class Tower extends Sprite {
     private final Bitmap barrelBitmap = null;
     private final RectF barrelRect = new RectF();
 
-    public Tower(int level, int x, int y) {
+    public Tower(int level, float x, float y) {
         super(0);
         // TODO : barrel 이미지 필요
         //barrelBitmap = BitmapPool.get(R.mipmap.attacktower);
+        this.x = x;
+        this.y = y;
+        isAttacked = false;
         setLevel(level);
     }
 
@@ -119,6 +125,11 @@ public class Tower extends Sprite {
     public void upgrade() {
         setLevel(level + 1);
     }
+
+    public void setAttacked(boolean value){
+        this.isAttacked = value;
+    }
+
 
     private void setLevel(int level) {
         this.level = level;
