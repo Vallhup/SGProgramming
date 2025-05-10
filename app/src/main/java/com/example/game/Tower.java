@@ -24,6 +24,7 @@ public class Tower extends Sprite {
     protected float x, y;
 
     private boolean isAttacked;
+    private float attackedTime = -1.0f;
 
     public enum Type {
         attack, slow;
@@ -52,7 +53,13 @@ public class Tower extends Sprite {
     public void update() {
         super.update();
 
-        // TODO : update 코드 추가
+        if(isAttacked) {
+            attackedTime += GameView.frameTime;
+            if(attackedTime >= 5.0f){
+                isAttacked = false;
+                attackedTime = -1.0f;
+            }
+        }
     }
 
     private static Paint rangePaint;
@@ -127,9 +134,11 @@ public class Tower extends Sprite {
     }
 
     public void setAttacked(boolean value){
-        this.isAttacked = value;
+        if(value && !isAttacked){
+            isAttacked = true;
+            attackedTime = 0.0f;
+        }
     }
-
 
     private void setLevel(int level) {
         this.level = level;
