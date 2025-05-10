@@ -52,13 +52,16 @@ public class Tower extends Sprite {
     @Override
     public void update() {
         super.update();
-
         if(isAttacked) {
             attackedTime += GameView.frameTime;
             if(attackedTime >= 5.0f){
                 isAttacked = false;
                 attackedTime = -1.0f;
             }
+        }
+
+        else{
+            attack();
         }
     }
 
@@ -85,38 +88,44 @@ public class Tower extends Sprite {
 
     private void attack() {
         Enemy target = setTarget();
+        if(target == null) {
+            return;
+        }
 
         fireCoolTime -= GameView.frameTime;
         if(fireCoolTime > 0){
             return;
         }
         fireCoolTime = FIRE_INTERVAL;
+
         PracticeScene scene = (PracticeScene) Scene.top();
-        if(scene == null) return;
+        if(scene == null) {
+            return;
+        }
 
         Bullet bullet = Bullet.get(this, target);
         scene.add(PracticeScene.Layer.enemy, bullet);
     }
 
     private Enemy setTarget() {
-        float dist = range;
+        float closestDistSq = range * range;
         Enemy nearest = null;
+
         ArrayList<IGameObject> enemies = PracticeScene.top().objectsAt(PracticeScene.Layer.enemy);
-        for(IGameObject gameObject : enemies){
-            if(!(gameObject instanceof Enemy)) continue;
+        for (IGameObject gameObject : enemies) {
+            if (!(gameObject instanceof Enemy)) continue;
+
             Enemy enemy = (Enemy) gameObject;
-            float fx = enemy.getX();
-            float fy = enemy.getY();
-            float dx = x - fx;
-            if(dx > dist) continue;
-            float dy = y - fy;
-            if(dy > dist) continue;
-            float d = (float) Math.sqrt(dx * dx + dy * dy);
-            if(dist > d){
-                dist = d;
+            float dx = x - enemy.getX();
+            float dy = y - enemy.getY();
+            float distSq = dx * dx + dy * dy;
+
+            if (distSq <= closestDistSq) {
+                closestDistSq = distSq;
                 nearest = enemy;
             }
         }
+
         return nearest;
     }
 
