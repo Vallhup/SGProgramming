@@ -21,7 +21,7 @@ public class Bullet extends Sprite implements IRecyclable {
     private Rect srcRect = new Rect();
     private float dx, dy, radius;
     private Enemy target;
-    private float damage;
+    private float power;
 
     private Bullet() {
         super(R.mipmap.attacktower);
@@ -50,7 +50,7 @@ public class Bullet extends Sprite implements IRecyclable {
         double speed = 10.0 + level;
         dx = (float) (speed * Math.cos(radian));
         dy = (float) (speed * Math.sin(radian));
-        this.damage = tower.damage;
+        this.power = tower.power;
         radius = 0.2f + level * 0.02f;
         //setPosition(tower.getX(), tower.getY(), radius);
     }

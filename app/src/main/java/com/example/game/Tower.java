@@ -31,7 +31,7 @@ public class Tower extends Sprite {
     }
     private static final String TAG = Tower.class.getSimpleName();
 
-    protected float damage, range;
+    protected float power, range;
     protected float angle = -90;
     private static final float FIRE_INTERVAL = 0.25f;
     private float fireCoolTime = FIRE_INTERVAL;
@@ -151,7 +151,7 @@ public class Tower extends Sprite {
 
     private void setLevel(int level) {
         this.level = level;
-        this.damage = (float) (10 * Math.pow(1.2, level - 1));
+        this.power = (float) (10 * Math.pow(1.2, level - 1));
         this.range = 2 + level * 2;
         float barrelSize = 0.5f + level * 0.1f;
         barrelRect.set(dstRect);
