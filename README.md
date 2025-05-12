@@ -73,10 +73,25 @@
 
 4. GameObject
 
- - Tower
-  - 
- - Enemy
- - Bullet
+ - Tower : Bullet을 생성하여 Enemy를 공격하는 객체
+  - attack, slow의 2가지 Type
+  - range내에서 가장 가까운 Enemy를 target으로 설정하여 Bullet을 발사
+  - 추가 골드를 소모하여 강화 가능
+
+ - Enemy : EnemyGenerator에게 생성되어 Tower의 공격을 받고 path를 따라 이동하는 객체
+  - normal, boss의 2가지 Type
+  - boss Enemy는 5초마다 자신의 주변 Tower를 3초간 정지시키는 패턴을 가짐
+  - EnemyGenerator에서 무리로 생성됨
+  - path를 따라 움직이며 path의 마지막까지 죽지않고 간다면 life가 감소됨
+
+
+ - Bullet : Tower에 의해 생성되어 Enemy를 실제로 공격하는 객체
+  - 발사한 Tower, target이 되는 Enemy를 인자로 줘서 생성
+  - attack Bullet: Tower의 damage만큼 target Enemy의 체력을 감소시킨다
+  - slow Bullet: Tower의 damage만큼 target Enemy의 SPEED를 감소시킨다 (3초 지속)
+
+![Image](https://github.com/user-attachments/assets/c111a62c-c131-49dd-afa7-b0e1afe1de13)
+
 
 5. 개발 일정 및 개발 현황
 
@@ -135,3 +150,13 @@
    
 
 6. 주 별 Commit 횟수
+
+
+| 기간  |  Commit 횟수    |                       
+|:-----:|----------------|
+| 1주차 |  7  |
+| 2주차 |  0  |
+| 3주차 |  0  |
+| 4주차 |  6  |
+| 5주차 |  21  |
+
