@@ -1,12 +1,14 @@
 package com.example.game;
 
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.graphics.RectF;
 
 import com.example.spgpproject.R;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Random;
 
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IGameObject;
@@ -15,6 +17,7 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.Gauge;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class Enemy extends AnimSprite implements IRecyclable, IBoxCollidable, ILayerProvider<PracticeScene.Layer> {
@@ -27,7 +30,15 @@ public class Enemy extends AnimSprite implements IRecyclable, IBoxCollidable, IL
     }
 
     public enum Type {
-        boss, normal;
+        boss, normal, COUNT, RANDOM;
+        static final int[] POSSIBILITIES = { 0, 10, 20, 30, 40 };
+        static int POSSIBILITY_SUM;
+        static {
+            POSSIBILITY_SUM = 0;
+            for (int p : POSSIBILITIES) {
+                POSSIBILITY_SUM += p;
+            }
+        }
     }
 
     // SPEED 값 설정 필요
@@ -38,43 +49,67 @@ public class Enemy extends AnimSprite implements IRecyclable, IBoxCollidable, IL
     // 최대 레벨 설정 필요
     public static final int MAX_LEVEL = 10;
     private int level;
-    private int life, maxLife;
+    private float speed, distance;
+    private float life, maxLife;
     protected RectF collisionRect = new RectF();
 
     private float range;
     private Type type;
+    private float angle;
 
     // TODO : Gauge 색 설정 필요
     protected  static Gauge gauge;
     //protected static Gauge gauge = new Gauge(0.1f, R.color.enemy_gauge_fg, R.color.enemy_gauge_bg);
 
-    public static Enemy get(int level, int index){
-        return Scene.top().getRecyclable(Enemy.class).init(level, index);
+    private static Rect[][] rects_array;
+
+    public static Enemy get(Type type, int level, float size){
+        return Scene.top().getRecyclable(Enemy.class).init(type, level, size);
     }
 
-    public Enemy() { super(0, 0, 0); }
+    public Enemy() {
+        super(0, 0, 0);
 
+        if(rects_array == null){
+            int w = bitmap.getWidth();
+            int h = bitmap.getHeight();
+            rects_array = new Rect[Type.COUNT.ordinal()][];
+            int x = 0;
+            for(int i = 0; i < Type.COUNT.ordinal(); ++i){
+                rects_array[i] = new Rect[2];
+                for(int j = 0; j < 2; ++j){
+                    rects_array[i][j] = new Rect(x, 0, x+h, h);
+                    x += h;
+                }
+            }
+        }
+    }
 
-    private Enemy init(int level, int index){
+    private static final Random rand = new Random();
+    private Enemy init(Type type, int level, float size){
+        if(type == Type.RANDOM){
+            int value = rand.nextInt(Type.POSSIBILITY_SUM);
+            for(int i = 0; i < Type.POSSIBILITIES.length; ++i){
+                value -= Type.POSSIBILITIES[i];
+                if(value < 0){
+                    type = Type.values()[i];
+                    break;
+                }
+            }
+        }
+        this.type = type;
+        this.width = this.height = size;
+        dx = dy = 0;
+        this.distance = 0;
+        this.level = level;
+        range = (type == Type.boss) ? 7f : 0;
+
         // TODO : 이미지 추가 필요
         //this.setImageResourceId(R.mipmap.enemy);
 
-        // TODO : 최초 position 설정
-        //setPosition();
-
-        updateCollisionRect();
-        this.level = level;
-        // TODO : 레벨에 따라 체력이 얼마나 올라갈지 설정
+        // TODO : 레벨에 따라 체력, 속도가 얼마나 올라갈지 설정
         this.life = this.maxLife = (level + 1) * 10;
-        dy = SPEED;
-
-        if(type == Type.boss){
-            range = 7f;
-        }
-
-        else{
-            range = 0;
-        }
+        this.speed = (level + 1) * 10;
 
         return this;
     }
@@ -87,25 +122,38 @@ public class Enemy extends AnimSprite implements IRecyclable, IBoxCollidable, IL
 
     @Override
     public void update() {
-        super.update();
-        if(dstRect.top > Metrics.height){
-            Scene.top().remove(this);
-        }
+        distance += speed * GameView.frameTime;
+        float maxDiff = width / 5;
+        dx += (2 * maxDiff * rand.nextFloat() - maxDiff) * GameView.frameTime;
+        if (dx < -maxDiff) dx = -maxDiff;
+        else if (dx > maxDiff) dx = maxDiff;
+        dy += (2 * maxDiff * rand.nextFloat() - maxDiff) * GameView.frameTime;
+        if (dy < -maxDiff) dy = -maxDiff;
+        else if (dy > maxDiff) dy = maxDiff;
 
-        else{
-            updateCollisionRect();
-        }
+        // TODO : Path 추가
+//        pm.getPosTan(distance, pos, tan);
+//        moveTo(pos[0] + dx, pos[1] + dy);
+//        angle = (float)(Math.atan2(tan[1], tan[0]) * 180 / Math.PI) ;
+//        if (distance > length) {
+//            PracticeScene scene = (PracticeScene) Scene.top();
+//            if (scene == null) return;
+//            scene.remove(PracticeScene.Layer.enemy, this);
+//        }
     }
 
     @Override
     public void draw(Canvas canvas) {
+        canvas.save();
+        canvas.rotate(angle, x, y);
         super.draw(canvas);
-        float gauge_width = width * 0.7f;
-        float gauge_x = x - gauge_width / 2;
-        float gauge_y = dstRect.bottom;
-        gauge.draw(canvas, gauge_x, gauge_y, gauge_width, (float)life / maxLife);
+        canvas.restore();
+        float size = width * 2 / 3;
+//        if (gauge == null) {
+//            //gauge = new Gauge(0.2f, R.color.flyHealthFg, R.color.flyHealthBg);
+//        }
+        gauge.draw(canvas, x - size / 2, y + size / 2, size, life / maxLife);
     }
-
     private void bossAttack() {
         ArrayList<IGameObject> targets = setTarget();
 
@@ -141,13 +189,6 @@ public class Enemy extends AnimSprite implements IRecyclable, IBoxCollidable, IL
 
         return targets;
     }
-
-    private void updateCollisionRect() {
-        collisionRect.set(dstRect);
-        collisionRect.inset(11f, 11f);
-    }
-
-    public RectF getCollisionRect() { return collisionRect; }
 
     @Override
     public void onRecycle(){
