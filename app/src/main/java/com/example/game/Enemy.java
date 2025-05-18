@@ -20,7 +20,7 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.Gauge;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
-public class Enemy extends AnimSprite implements IRecyclable, IBoxCollidable, ILayerProvider<PracticeScene.Layer> {
+public class Enemy extends AnimSprite implements IRecyclable, ILayerProvider<PracticeScene.Layer> {
     public float getX() {
         return 0;
     }
