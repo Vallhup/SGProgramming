@@ -6,6 +6,8 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IGameObject;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.res.BitmapPool;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.RectUtil;
@@ -25,6 +27,10 @@ public class Sprite implements IGameObject {
         }
         Log.v(TAG, "Created " + this.getClass().getSimpleName() + "@" + System.identityHashCode(this));
     }
+    public Sprite(int mipmapId, float x, float y, float width, float height) {
+        this(mipmapId);
+        setPosition(x, y, width, height);
+    }
 
     public void setImageResourceId(int mipmapId) {
         bitmap = BitmapPool.get(mipmapId);
@@ -37,6 +43,11 @@ public class Sprite implements IGameObject {
         RectUtil.setRect(dstRect, x, y, radius);
 
     }
+    public void setPosition(float x, float y) {
+        this.x = x;
+        this.y = y;
+        RectUtil.setRect(dstRect, x, y, width, height);
+    }
     public void setPosition(float x, float y, float width, float height) {
         this.x = x;
         this.y = y;
@@ -44,6 +55,28 @@ public class Sprite implements IGameObject {
         this.height = height;
         radius = Math.min(width, height) / 2;
         RectUtil.setRect(dstRect, x, y, width, height);
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+    public float getRadius() {
+        return radius;
+    }
+    public float getPropotionalHeight(float width) {
+        return width / bitmap.getWidth() * bitmap.getHeight();
     }
     @Override
     public void update() {
@@ -57,5 +90,11 @@ public class Sprite implements IGameObject {
     @Override
     public void draw(Canvas canvas) {
         canvas.drawBitmap(bitmap, srcRect, dstRect, null);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "@" + System.identityHashCode(this) + "(" + (int)width + "x" + (int)height + ")";
     }
 }
