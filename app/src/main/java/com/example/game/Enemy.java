@@ -36,7 +36,7 @@ public class Enemy extends SheetSprite implements IRecyclable {
         float getMaxHealth() {
             return HEALTHS[ordinal()];
         }
-        static final float[] HEALTHS = { 200, 50 };
+        static final float[] HEALTHS = { 130, 50 };
         static final int[] POSSIBILITIES = { 5, 10 };
         static int POSSIBILITY_SUM;
         static {
