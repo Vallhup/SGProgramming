@@ -182,9 +182,11 @@ public class Selector extends Sprite {
         return true;
     }
     private boolean upgradeCannon() {
+        if(tower.getLevel() >= 2) return false;
         int cost = tower.getUpgradeCost();
         int score = scene.score.getScore();
         if (cost > score) return false;
+
         scene.score.add(-cost);
         tower.upgrade();
         return true;

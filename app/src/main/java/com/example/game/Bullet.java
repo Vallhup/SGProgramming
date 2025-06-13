@@ -1,10 +1,6 @@
 package com.example.game;
 
-import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.util.Log;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.spgpproject.R;
 
@@ -18,70 +14,20 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.CollisionHelper;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class Bullet extends Sprite implements IRecyclable {
-//    public enum Type {
-//        attack, slow;
-//    }
-//
-//    private Rect srcRect = new Rect();
-//    private float dx, dy, radius;
-//    private Enemy target;
-//    private float power;
-//
-//    private Bullet() {
-//        super(R.mipmap.attacktower);
-//    }
-//
-//    public static Bullet get(Tower tower, Enemy enemy) {
-//        Bullet bullet = Scene.top().getRecyclable(Bullet.class);
-//        if(bullet == null){
-//            bullet = new Bullet();
-//        }
-//        bullet.init(tower, enemy);
-//
-//        return bullet;
-//    }
-//
-//    private void init(Tower tower, Enemy enemy) {
-//        int w = bitmap.getWidth();
-//        int h = bitmap.getHeight();
-//        int maxLevel = w / h;
-//        int level = tower.level;
-//        if (level < 1) level = 1;
-//        if (level > maxLevel) level = maxLevel;
-//        srcRect.set(h * (level - 1), 0, h * level, h);
-//        this.target = target;
-//        double radian = tower.angle * Math.PI / 180;
-//        double speed = 10.0 + level;
-//        dx = (float) (speed * Math.cos(radian));
-//        dy = (float) (speed * Math.sin(radian));
-//        this.power = tower.power;
-//        radius = 0.2f + level * 0.02f;
-//        //setPosition(tower.getX(), tower.getY(), radius);
-//    }
-//
-//    @Override
-//    public void update() {
-//        // TODO : update 코드 추가
-//
-//    }
-//
-//    @Override
-//    public void draw(Canvas canvas) {
-//        canvas.drawBitmap(bitmap, srcRect, dstRect, null);
-//    }
-//
-//    @Override
-//    public void onRecycle(){
-//    }
-
     private static final String TAG = Bullet.class.getSimpleName();
 
     public enum Type {
         attack, slow;
     }
 
+    private Type type;
+
+    private static final int[] BITMAP_IDS = {
+            R.mipmap.attack_bullet, R.mipmap.slow_bullet
+    };
+
     public Bullet() {
-        super(R.mipmap.bullet, 0, 0, 50f, 50f);
+        super(R.mipmap.attack_bullet, 0, 0, 50f, 50f);
         srcRect = new Rect();
     }
 
@@ -108,6 +54,14 @@ public class Bullet extends Sprite implements IRecyclable {
         this.splashes = level >= 4;
         radius = 20f + level * 2f;
         setPosition(tower.getX(), tower.getY(), radius);
+        Tower.Type tType = tower.getType();
+        if (tType == Tower.Type.attack) {
+            type = Bullet.Type.attack;
+            setImageResourceId(R.mipmap.attack_bullet);
+        } else {
+            type = Bullet.Type.slow;
+            setImageResourceId(R.mipmap.slow_bullet);
+        }
 
         return this;
     }
@@ -135,10 +89,16 @@ public class Bullet extends Sprite implements IRecyclable {
     }
 
     private void hit(Enemy enemy, float damage, MainScene scene) {
-        boolean dead = enemy.decreaseLife(damage);
-        if (dead) {
-            scene.remove(MainScene.Layer.enemy, enemy);
-            scene.score.add(enemy.score());
+        if(type == Type.attack) {
+            boolean dead = enemy.decreaseLife(damage);
+            if (dead) {
+                scene.remove(MainScene.Layer.enemy, enemy);
+                scene.score.add(enemy.score());
+            }
+        }
+
+        else {
+            enemy.decreaseSpeed(damage);
         }
     }
 
