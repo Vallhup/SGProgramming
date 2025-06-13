@@ -213,7 +213,7 @@ public class Enemy extends SheetSprite implements IRecyclable {
             return HEALTHS[ordinal()];
         }
         static final float[] HEALTHS = { 100, 50 };
-        static final int[] POSSIBILITIES = { 0, 10, 20, 30, 40 };
+        static final int[] POSSIBILITIES = { 5, 10 };
         static int POSSIBILITY_SUM;
         static {
             POSSIBILITY_SUM = 0;
@@ -260,7 +260,7 @@ public class Enemy extends SheetSprite implements IRecyclable {
         }
     }
     public static Enemy get(boolean boss, float speedRatio) {
-        Enemy.Type type = boss ? Type.boss : Enemy.Type.random();
+        Enemy.Type type = boss ? Type.boss : Type.normal;
         float size = rand.nextFloat() * 100 + 150;
         if (boss) {
             size *= 1.5f;
@@ -269,6 +269,7 @@ public class Enemy extends SheetSprite implements IRecyclable {
         return Scene.top().getRecyclable(Enemy.class).init(type, size, speed);
     }
     public Enemy init(Type type, float size, float speed) {
+        this.type = type;
         srcRects = rects_array[type.ordinal()];
         setPosition(0, 0, size, size);
         distance = 0;
@@ -276,6 +277,7 @@ public class Enemy extends SheetSprite implements IRecyclable {
         this.speed = speed;
         range = (type == Type.boss) ? 7f : 0;
         life = maxLife = displayLife = type.getMaxHealth() * (0.9f + rand.nextFloat() * 0.2f);
+        this.bossSkillTimer = 0;
         update();
         return this;
     }
@@ -399,8 +401,8 @@ public class Enemy extends SheetSprite implements IRecyclable {
     @Override
     public void draw(Canvas canvas) {
         canvas.save();
-        canvas.rotate(angle, x, y);
         super.draw(canvas);
+        canvas.rotate(angle, x, y);
         canvas.restore();
         float barSize = width * 2 / 3;
         if (gauge == null) {

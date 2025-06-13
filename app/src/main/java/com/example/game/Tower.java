@@ -1,17 +1,13 @@
 package com.example.game;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
-import android.graphics.RectF;
-import android.view.MotionEvent;
 
 import androidx.annotation.NonNull;
 
 import com.example.spgpproject.R;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -20,7 +16,6 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.res.BitmapPool;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
-import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class Tower extends Sprite {
 //    protected int level;
@@ -165,7 +160,7 @@ public class Tower extends Sprite {
 
     protected int level;
     protected float power, range;
-    protected float interval;
+    protected float interval = 0.5f;
     protected float angle = -90;
     protected float time;
     private boolean isAttacked;
@@ -288,10 +283,6 @@ public class Tower extends Sprite {
     }
 
     public boolean upgrade() {
-        if (level == BITMAP_IDS.length) {
-            uninstall();
-            return false;
-        }
         setLevel(level + 1);
         return true;
     }

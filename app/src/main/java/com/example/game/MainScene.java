@@ -16,12 +16,10 @@ public class MainScene extends Scene {
 
     public enum Layer {
         bg, enemy, bullet, tower, score, selection, controller;
-        public static final int COUNT = values().length;
     }
 
     public MainScene() {
-        Metrics.setGameSize(1600, 900);
-        initLayers(Layer.COUNT);
+        initLayers(Layer.values().length);
 
         bg = new BackGround();
         add(Layer.bg, bg);
