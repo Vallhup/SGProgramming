@@ -76,6 +76,10 @@ public class Bullet extends Sprite implements IRecyclable {
 
     private static final String TAG = Bullet.class.getSimpleName();
 
+    public enum Type {
+        attack, slow;
+    }
+
     public Bullet() {
         super(R.mipmap.bullet, 0, 0, 50f, 50f);
         srcRect = new Rect();
@@ -88,6 +92,7 @@ public class Bullet extends Sprite implements IRecyclable {
     protected float power;
     protected boolean splashes;
     private Bullet init(Tower tower, Enemy target) {
+
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();
         int maxLevel = w / h;
@@ -101,7 +106,6 @@ public class Bullet extends Sprite implements IRecyclable {
         dy = (float) (speed * Math.sin(radian));
         this.power = (float) (10 * Math.pow(1.2, level - 1));
         this.splashes = level >= 4;
-        // 10.0, 12.0, 14.4, 17.28, 20.736, 24.8832, 29.85984, 35.83181, 42.99817, 51.5978
         radius = 20f + level * 2f;
         setPosition(tower.getX(), tower.getY(), radius);
 
@@ -114,7 +118,6 @@ public class Bullet extends Sprite implements IRecyclable {
         MainScene scene = (MainScene) Scene.top();
         if (x < -radius || x > Metrics.width + radius ||
                 y < -radius || y > Metrics.height + radius) {
-            //Log.d("CannonFire", "Remove(" + x + "," + y + ") " + this);
             scene.remove(MainScene.Layer.bullet, this);
             return;
         }
@@ -135,7 +138,7 @@ public class Bullet extends Sprite implements IRecyclable {
         boolean dead = enemy.decreaseLife(damage);
         if (dead) {
             scene.remove(MainScene.Layer.enemy, enemy);
-            //scene.score.add(enemy.score());
+            scene.score.add(enemy.score());
         }
     }
 

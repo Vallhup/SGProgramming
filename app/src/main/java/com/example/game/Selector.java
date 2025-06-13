@@ -122,7 +122,7 @@ public class Selector extends Sprite {
 
         setPosition(cx, cy);
 
-        boolean possible = !intersectsIfInstalledAt(cx, cy) && scene.tiledBg.canInstallAt(mapX, mapY);
+        boolean possible = !intersectsIfInstalledAt(cx, cy) && scene.bg.canInstallAt(mapX, mapY);
         int resId = possible ? R.mipmap.selection : R.mipmap.sel_non_installable;
         bitmap = BitmapPool.get(resId);
 
@@ -160,12 +160,10 @@ public class Selector extends Sprite {
     }
 
     private boolean doItemAction(int menuItem) {
-        if (menuItem == R.mipmap.f_01_01) {
+        if (menuItem == R.mipmap.attacktower) {
             return installCannon(1);
-        } else if (menuItem == R.mipmap.f_02_01) {
+        } else if (menuItem == R.mipmap.slowtower) {
             return installCannon(2);
-        } else if (menuItem == R.mipmap.f_03_01) {
-            return installCannon(3);
         } else if (menuItem == R.mipmap.upgrade) {
             return upgradeCannon();
         } else if (menuItem == R.mipmap.uninstall) {
@@ -174,12 +172,12 @@ public class Selector extends Sprite {
         return false;
     }
 
-    private boolean installCannon(int level) {
-        int cost = Tower.getInstallationCost(level);
+    private boolean installCannon(int type) {
+        int cost = Tower.getInstallationCost(type);
         int score = scene.score.getScore();
         if (cost > score) return false;
         scene.score.add(-cost);
-        Tower tower = new Tower(level, (int)x, (int)y);
+        Tower tower = new Tower(type, (int)x, (int)y);
         scene.add(MainScene.Layer.tower, tower);
         return true;
     }

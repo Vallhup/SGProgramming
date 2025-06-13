@@ -203,13 +203,16 @@ public class Enemy extends SheetSprite implements IRecyclable {
 //
 //    @Override
 //    public PracticeScene.Layer getLayer() { return PracticeScene.Layer.enemy; }
-private static final String TAG = Enemy.class.getSimpleName();
+    private static final String TAG = Enemy.class.getSimpleName();
+    private float range;
+    private Type type;
+    private float bossSkillTimer = 0;
     public enum Type {
-        boss, red, blue, cyan, dragon;
+        boss, normal;
         float getMaxHealth() {
             return HEALTHS[ordinal()];
         }
-        static final float[] HEALTHS = { 150, 50, 30, 20, 10 };
+        static final float[] HEALTHS = { 100, 50 };
         static final int[] POSSIBILITIES = { 0, 10, 20, 30, 40 };
         static int POSSIBILITY_SUM;
         static {
@@ -220,23 +223,21 @@ private static final String TAG = Enemy.class.getSimpleName();
         }
         static Type random() {
             int value = rand.nextInt(Type.POSSIBILITY_SUM);
-            int rv = value;
             for (int i = 0; i < Type.POSSIBILITIES.length; i++) {
                 value -= Type.POSSIBILITIES[i];
                 if (value < 0) {
                     Type type = Type.values()[i];
-                    // Log.d(TAG, "RandomValue=" + rv + " type=" + type + " i=" + i);
                     return type;
                 }
             }
-            return dragon;
+            return boss;
         }
     }
     public Enemy() {
         super(R.mipmap.enemy, 2.0f);
         if (rects_array == null) {
             int type_count = Type.values().length;
-            //int w = bitmap.getWidth();
+            int w = bitmap.getWidth();
             int h = bitmap.getHeight();
             rects_array = new Rect[type_count][];
             int x = 0;
@@ -249,6 +250,14 @@ private static final String TAG = Enemy.class.getSimpleName();
             }
         }
         setPosition(0, 0, 200, 200);
+    }
+    public void setType(boolean boss)
+    {
+        if(boss) {
+            type = Type.boss;
+        } else {
+            type = Type.normal;
+        }
     }
     public static Enemy get(boolean boss, float speedRatio) {
         Enemy.Type type = boss ? Type.boss : Enemy.Type.random();
@@ -265,6 +274,7 @@ private static final String TAG = Enemy.class.getSimpleName();
         distance = 0;
         dx = dy = 0;
         this.speed = speed;
+        range = (type == Type.boss) ? 7f : 0;
         life = maxLife = displayLife = type.getMaxHealth() * (0.9f + rand.nextFloat() * 0.2f);
         update();
         return this;
@@ -274,7 +284,7 @@ private static final String TAG = Enemy.class.getSimpleName();
     private static final PathMeasure pm;
     private static final float pathLength;
     private static final Path path;
-    //    private static final Paint paint;
+
     static {
         path = PathParser.createPathFromPathData(
                 "M -128,1817.6\n" +
@@ -294,16 +304,7 @@ private static final String TAG = Enemy.class.getSimpleName();
 
         pm = new PathMeasure(path, false);
         pathLength = pm.getLength();
-
-//        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-//        paint.setStyle(Paint.Style.STROKE);
-//        paint.setStrokeWidth(10f);
-//        paint.setColor(Color.MAGENTA);
     }
-
-//    public static void drawPath(Canvas canvas) {
-//        canvas.drawPath(path, paint);
-//    }
 
     private static Rect[][] rects_array;
     private float distance, speed, angle;
@@ -315,7 +316,7 @@ private static final String TAG = Enemy.class.getSimpleName();
         return life <= 0;
     }
     public int score() {
-        return Math.round(maxLife / 10) * 10;
+        return (type == Type.boss) ? 3 : 1;
     }
     private float dx, dy;
     private final float[] pos = new float[2];
@@ -334,11 +335,18 @@ private static final String TAG = Enemy.class.getSimpleName();
                 displayLife = life;
             }
         }
-        distance += speed * GameView.frameTime; // * 5; 파리만 빠르게 움직이게 하고 싶다면
+        distance += speed * GameView.frameTime;
         if (distance > pathLength) {
             Scene.top().remove(MainScene.Layer.enemy, this);
             return;
         }
+
+        bossSkillTimer += GameView.frameTime;
+        if(bossSkillTimer >= 5.0f){
+            bossAttack();
+            bossSkillTimer = 0;
+        }
+
         float maxDiff = width / 5;
         dx += (2 * maxDiff * rand.nextFloat() - maxDiff) * GameView.frameTime;
         if (dx < -maxDiff) dx = -maxDiff;
@@ -351,6 +359,43 @@ private static final String TAG = Enemy.class.getSimpleName();
         setPosition(pos[0] + dx, pos[1] + dy);
         angle = (float) Math.toDegrees(Math.atan2(tan[1], tan[0]));
     }
+
+    private void bossAttack() {
+        ArrayList<IGameObject> targets = setTarget();
+
+        for(IGameObject gameObject : targets) {
+            if(!(gameObject instanceof Tower)) continue;
+
+            Tower tower = (Tower) gameObject;
+            tower.setAttacked(true);
+        }
+    }
+
+    private ArrayList<IGameObject> setTarget() {
+        ArrayList<IGameObject> towers = MainScene.top().objectsAt(MainScene.Layer.tower);
+        ArrayList<IGameObject> targets = new ArrayList<IGameObject>();
+
+        float mx = this.x;
+        float my = this.y;
+        float range = this.range;
+
+        for(IGameObject gameObject : towers){
+            // range안에 있는 tower들을 targets에 push
+            if(!(gameObject instanceof Tower)) continue;
+
+            Tower tower = (Tower) gameObject;
+            float dx = tower.getX() - mx;
+            float dy = tower.getY() - my;
+            float distanceSquared = dx * dx + dy * dy;
+
+            if(distanceSquared <= range * range){
+                targets.add(gameObject);
+            }
+        }
+
+        return targets;
+    }
+
     @Override
     public void draw(Canvas canvas) {
         canvas.save();

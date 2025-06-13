@@ -164,18 +164,18 @@ public class Tower extends Sprite {
 
 
     protected int level;
-    protected float range;
+    protected float power, range;
     protected float interval;
-    protected final RectF barrelRect = new RectF();
     protected float angle = -90;
     protected float time;
+    private boolean isAttacked;
     private static final int[] BITMAP_IDS = {
             R.mipmap.attacktower, R.mipmap.slowtower
     };
-    public Tower(int level, float x, float y) {
+    public Tower(int type, float x, float y) {
         super(0);
         setPosition(x, y, 200, 200);
-        setLevel(level);
+        setLevel(1);
     }
     private static final int[] COSTS = {
         50, 20
@@ -199,10 +199,7 @@ public class Tower extends Sprite {
         bitmap = BitmapPool.get(BITMAP_IDS[level - 1]);
         this.level = level;
         this.range = 200 + (level * 200);
-        this.interval = 5.5f - level / 2.0f;
-        barrelRect.set(dstRect);
-        float barrelSize = 50f + level * 10f;
-        barrelRect.inset(-barrelSize, -barrelSize);
+        this.power = level * 10;
     }
 
     @Override
@@ -224,8 +221,8 @@ public class Tower extends Sprite {
         float nearest_dist_sq = range * range;
         Enemy nearest = null;
         MainScene scene = (MainScene) Scene.top();
-        ArrayList<IGameObject> flies = scene.objectsAt(MainScene.Layer.enemy);
-        for (IGameObject gameObject: flies) {
+        ArrayList<IGameObject> enemies = scene.objectsAt(MainScene.Layer.enemy);
+        for (IGameObject gameObject: enemies) {
             if (!(gameObject instanceof Enemy)) continue;
             Enemy fly = (Enemy) gameObject;
             float fx = fly.getX();
@@ -274,6 +271,13 @@ public class Tower extends Sprite {
     public boolean intersectsIfInstalledAt(float x, float y) {
         float dx = Math.abs(x - this.x), dy = Math.abs(y - this.y);
         return dx <= radius && dy <= radius;
+    }
+
+    public void setAttacked(boolean value){
+        if(value && !isAttacked){
+            isAttacked = true;
+            time = 0;
+        }
     }
 
     @NonNull

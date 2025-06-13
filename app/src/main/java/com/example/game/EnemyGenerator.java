@@ -93,17 +93,15 @@ public class EnemyGenerator implements IGameObject {
                 waveTime = 0;
                 bossPhase = false;
                 wave++;
-                // 다음 wave 에서 waveInterval 이나 flySpeedRatio 등을 조정해도 좋을듯.
             }
         } else {
             time += GameView.frameTime;
             if (time > interval) {
                 spawn();
                 time -= interval;
-                interval *= 0.995f; // 0.5% 씩 간격을 줄인다
+                interval *= 0.995f;
                 if (interval < INTERVAL_MIN) {
                     interval = INTERVAL_MIN;
-                    // 하지만 이 이상 빨라지진 않게 한다
                 }
             }
             if (waveTime > waveInterval) {
@@ -116,10 +114,9 @@ public class EnemyGenerator implements IGameObject {
 
     private void spawn() {
         Enemy enemy = Enemy.get(bossPhase, flySpeedRatio);
+        enemy.setType(bossPhase);
         scene.add(MainScene.Layer.enemy, enemy);
     }
     @Override
-    public void draw(Canvas canvas) {
-//        Enemy.drawPath(canvas);
-    }
+    public void draw(Canvas canvas) {}
 }
