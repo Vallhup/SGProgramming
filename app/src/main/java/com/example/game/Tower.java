@@ -24,6 +24,7 @@ public class Tower extends Sprite {
     protected float angle = -90;
     protected float time;
     private boolean isAttacked;
+    private float attackedTime = -1.0f;
     private static final int[] BITMAP_IDS = {
             R.mipmap.attacktower, R.mipmap.slowtower
     };
@@ -56,7 +57,7 @@ public class Tower extends Sprite {
         bitmap = BitmapPool.get(BITMAP_IDS[type - 1]);
     }
     private static final int[] COSTS = {
-        40, 20
+        30, 15
     };
     public static int getInstallationCost(int type) {
         return COSTS[type - 1];
@@ -92,11 +93,20 @@ public class Tower extends Sprite {
         if (fly != null) {
             angle = (float) Math.toDegrees(Math.atan2(fly.getY() - y, fly.getX() - x));
         }
-        time += GameView.frameTime;
-        if (time > interval && fly != null) {
-            Bullet bullet = Bullet.get(this, fly);
-            Scene.top().add(MainScene.Layer.bullet, bullet);
-            time = 0;
+
+        if(isAttacked) {
+            attackedTime += GameView.frameTime;
+            if(attackedTime >= 2.0f){
+                isAttacked = false;
+                attackedTime = -1.0f;
+            }
+        } else {
+            time += GameView.frameTime;
+            if (time > interval && fly != null) {
+                Bullet bullet = Bullet.get(this, fly);
+                Scene.top().add(MainScene.Layer.bullet, bullet);
+                time = 0;
+            }
         }
     }
 
@@ -155,10 +165,8 @@ public class Tower extends Sprite {
     }
 
     public void setAttacked(boolean value){
-        if(value && !isAttacked){
-            isAttacked = true;
-            time = 0;
-        }
+        this.isAttacked = value;
+        attackedTime = 0.0f;
     }
 
     @NonNull

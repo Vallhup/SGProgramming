@@ -68,7 +68,7 @@ public class EnemyGenerator implements IGameObject {
 
     private static final float INTERVAL_INIT = 2.0f;
     private static final float INTERVAL_MIN = 0.1f;
-    private static final float INTERVAL_WAVE = 30.0f;
+    private static final float INTERVAL_WAVE = 10.0f;
     private final MainScene scene;
     private float time, interval, flySpeedRatio;
     private float waveTime, waveInterval;
@@ -99,7 +99,7 @@ public class EnemyGenerator implements IGameObject {
             if (time > interval) {
                 spawn();
                 time -= interval;
-                interval *= 0.995f;
+                interval *= 0.993f;
                 if (interval < INTERVAL_MIN) {
                     interval = INTERVAL_MIN;
                 }

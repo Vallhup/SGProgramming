@@ -99,7 +99,7 @@ public class Enemy extends SheetSprite implements IRecyclable {
         distance = 0;
         dx = dy = 0;
         this.speed = speed;
-        range = (type == Type.boss) ? 600.0f : 0;
+        range = (type == Type.boss) ? 500.0f : 0;
         life = maxLife = displayLife = type.getMaxHealth() * (0.9f + rand.nextFloat() * 0.2f);
         this.bossSkillTimer = 0;
         update();
@@ -142,13 +142,7 @@ public class Enemy extends SheetSprite implements IRecyclable {
         return life <= 0;
     }
 
-    protected float time = 0;
-    protected boolean isAttacked = false;
-    protected float defaultSpeed;
     public void decreaseSpeed(float power) {
-        isAttacked = true;
-        time = 0;
-        defaultSpeed = speed;
         speed -= power;
         if(speed < 20.0f){
             speed = 20.0f;
@@ -156,7 +150,7 @@ public class Enemy extends SheetSprite implements IRecyclable {
     }
 
     public int score() {
-        return (type == Type.boss) ? 3 : 1;
+        return (type == Type.boss) ? 4 : 2;
     }
     private float dx, dy;
     private final float[] pos = new float[2];
@@ -182,16 +176,9 @@ public class Enemy extends SheetSprite implements IRecyclable {
         }
 
         bossSkillTimer += GameView.frameTime;
-        if(bossSkillTimer >= 5.0f){
+        if(bossSkillTimer >= 5.0f) {
             bossAttack();
             bossSkillTimer = 0;
-        }
-
-        time += GameView.frameTime;
-        if((time >= 3.0f) && (isAttacked)){
-            time = 0;
-            isAttacked = false;
-            speed = defaultSpeed;
         }
 
         float maxDiff = width / 5;
