@@ -93,7 +93,7 @@ public class Bullet extends Sprite implements IRecyclable {
             boolean dead = enemy.decreaseLife(damage);
             if (dead) {
                 scene.remove(MainScene.Layer.enemy, enemy);
-                scene.score.add(enemy.score());
+                scene.money.add(enemy.score());
             }
         }
 

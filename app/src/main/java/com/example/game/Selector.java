@@ -78,7 +78,8 @@ public class Selector extends Sprite {
         }
         if (item == R.mipmap.upgrade) {
             if (tower == null) return true;
-            int score = scene.score.getScore();
+            if (tower.level >= 2) return true;
+            int score = scene.money.getScore();
             int cost = tower.getUpgradeCost();
             return cost > score;
         }
@@ -87,7 +88,7 @@ public class Selector extends Sprite {
 
     private boolean canInstall(int type) {
         int cost = Tower.getInstallationCost(type);
-        int score = scene.score.getScore();
+        int score = scene.money.getScore();
         return cost <= score;
     }
 
@@ -174,9 +175,9 @@ public class Selector extends Sprite {
 
     private boolean installCannon(int type) {
         int cost = Tower.getInstallationCost(type);
-        int score = scene.score.getScore();
+        int score = scene.money.getScore();
         if (cost > score) return false;
-        scene.score.add(-cost);
+        scene.money.add(-cost);
         Tower tower = new Tower(type, (int)x, (int)y);
         scene.add(MainScene.Layer.tower, tower);
         return true;
@@ -184,17 +185,17 @@ public class Selector extends Sprite {
     private boolean upgradeCannon() {
         if(tower.getLevel() >= 2) return false;
         int cost = tower.getUpgradeCost();
-        int score = scene.score.getScore();
+        int score = scene.money.getScore();
         if (cost > score) return false;
 
-        scene.score.add(-cost);
+        scene.money.add(-cost);
         tower.upgrade();
         return true;
     }
 
     private boolean uninstallCannon() {
         int price = tower.getSellPrice();
-        scene.score.add(price);
+        scene.money.add(price);
         tower.uninstall();
         tower = null;
         return true;

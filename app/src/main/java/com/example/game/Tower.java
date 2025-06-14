@@ -57,7 +57,7 @@ public class Tower extends Sprite {
         bitmap = BitmapPool.get(BITMAP_IDS[type - 1]);
     }
     private static final int[] COSTS = {
-        30, 15
+        25, 15
     };
     public static int getInstallationCost(int type) {
         return COSTS[type - 1];

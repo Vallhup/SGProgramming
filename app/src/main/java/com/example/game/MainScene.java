@@ -12,10 +12,14 @@ public class MainScene extends Scene {
     private static final String TAG = MainScene.class.getSimpleName();
     protected final BackGround bg;
     protected final Selector selector;
-    protected final Score score;
+    protected final Score money, life;
+
+    public void decreseLife(int damage) {
+        life.add(-damage);
+    }
 
     public enum Layer {
-        bg, enemy, bullet, tower, score, selection, controller;
+        bg, enemy, tower, bullet, score, selection, controller;
     }
 
     public MainScene() {
@@ -26,9 +30,13 @@ public class MainScene extends Scene {
         add(Layer.selection, selector = new Selector(this));
         add(Layer.controller, new EnemyGenerator(this));
 
-        score = new Score(R.mipmap.gold_number, Metrics.width - 50, 50, 100);
-        score.setScore(70);
-        add(Layer.score, score);
+        money = new Score(R.mipmap.gold_number, Metrics.width - 50, 50, 100);
+        money.setScore(70);
+        add(Layer.score, money);
+
+        life = new Score(R.mipmap.gold_number, Metrics.width - 300, 50, 100);
+        life.setScore(8);
+        add(Layer.score, life);
     }
 
     @Override

@@ -171,7 +171,9 @@ public class Enemy extends SheetSprite implements IRecyclable {
         }
         distance += speed * GameView.frameTime;
         if (distance > pathLength) {
-            Scene.top().remove(MainScene.Layer.enemy, this);
+            MainScene scene = (MainScene) Scene.top();
+            scene.decreseLife(1);
+            scene.remove(MainScene.Layer.enemy, this);
             return;
         }
 
