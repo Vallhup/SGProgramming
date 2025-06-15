@@ -152,7 +152,7 @@
 
 6. 주 별 Commit 횟수
 
-![Image](https://github.com/user-attachments/assets/6bc68d24-880b-43a1-9906-ea0ca22c2cdf)
+![Image](https://github.com/user-attachments/assets/44014ff7-80e3-4b89-8f72-fa056a55f31c)
 
 | 기간  |  Commit 횟수    |                       
 |:-----:|----------------|
@@ -164,7 +164,7 @@
 | 6주차 |  3  |
 | 7주차 |  4  |
 | 8주차 |  0  |
-| 9주차 |  0  |
+| 9주차 |  10 |
 
 7. 개발 기술
 
