@@ -90,7 +90,7 @@
  - Bullet : Tower에 의해 생성되어 Enemy를 실제로 공격하는 객체
     - 발사한 Tower, target이 되는 Enemy를 인자로 줘서 생성
     - attack Bullet: Tower의 damage만큼 target Enemy의 체력을 감소시킨다
-    - slow Bullet: Tower의 damage만큼 target Enemy의 SPEED를 감소시킨다 (3초 지속)
+    - slow Bullet: Tower의 damage만큼 target Enemy의 SPEED를 감소시킨다
 
 ![Image](https://github.com/user-attachments/assets/c111a62c-c131-49dd-afa7-b0e1afe1de13)
 
@@ -166,3 +166,28 @@
 | 8주차 |  0  |
 | 9주차 |  0  |
 
+7. 개발 기술
+
+ - 사용된 기술
+   - 간단한 AABB 충돌 처리
+   - 델타타임 기반 상태 업데이트
+
+ - 수업내용에서 차용한 것
+   - 맵 데이터 및 path
+
+ - 직접 개발한 것
+   - Tower, Enemy, Bullet, EnemyGenerator 전반 (Enemy 이동 제외)
+   - Boss Monster Attack
+   - Score, Life, Gold 시스템 (GameFramwork score 활용)
+
+8. 아쉬운 점
+
+ - 팔기 위해 보충할 것들
+   - 일시정지, 종료 기능
+   - 게임의 스케일 업
+      - Tower, Enemy 종류 증가
+      - 스테이지 다변화
+      - 최고 점수 저장
+
+ - 결국 해결하지 못한 문제 / 버그
+   - Tower가 가장 가까운 Enemy를 기준으로 공격하니까 데미지가 없는 Slow Tower는 Enemy가 죽지 않으면 평생 한 Enemy를 공격하게 됨
